@@ -1,4 +1,5 @@
 import sys
+import time
 import pygame
 
 # Initialisation de Pygame
@@ -76,6 +77,9 @@ sprites_group.add(sprite)
 end_rect = pygame.Rect(screen_width - 50, 50, 50, 50)  # Point de fin
 end_group = pygame.sprite.Group()  # Nous n'en avons pas besoin pour l'affichage, mais juste pour gérer les collisions
 
+HAS_MOVED = False
+STARTED_MOVING = None
+
 # Boucle principale
 running = True
 while running:
@@ -86,6 +90,7 @@ while running:
 
     # Gestion du mouvement du joueur
     keys = pygame.key.get_pressed()
+    
     if keys[pygame.K_LEFT]:
         sprite.go_left()
     if keys[pygame.K_RIGHT]:
@@ -97,9 +102,13 @@ while running:
 
     # Vérification de collision avec le point de fin
     if sprite.check_collision() == "WIN":
-        print("Félicitations ! Vous avez atteint la fin.")
+        CHRONO_END = time.time() - STARTED_MOVING
+        print("Félicitations ! Vous avez atteint la fin. En {} secondes.".format(CHRONO_END))
         running = False
-
+    if not HAS_MOVED and (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]):
+        print("Début du chrono, has moved {}".format(HAS_MOVED))
+        STARTED_MOVING = time.time()
+        HAS_MOVED = True
     # Affichage de fond avec la carte
     screen.blit(background, (0, 0))
     
@@ -109,7 +118,7 @@ while running:
     # Dessiner le point d'arrivée (invisible pour le joueur)
     pygame.draw.rect(screen, WIN_COLOR, end_rect)  # Cela sert à la détection de collision seulement
 
-    print(sprite.rect.x, "  |  ", sprite.rect.y)
+    #print(sprite.rect.x, "  |  ", sprite.rect.y)
     
     # Mettre à jour l'affichage
     pygame.display.flip()
