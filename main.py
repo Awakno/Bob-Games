@@ -80,6 +80,39 @@ end_group = pygame.sprite.Group()  # Nous n'en avons pas besoin pour l'affichage
 HAS_MOVED = False
 STARTED_MOVING = None
 
+class Enemi(pygame.sprite.Sprite):
+    def __init__(self, path, position, start,velocity):
+        super().__init__()
+        self.image = pygame.image.load(path).convert_alpha()
+        self.rect = self.image.get_rect(center=position)
+        self.velocity = velocity
+        # Position de départ
+        self.rect.x = start[0]
+        self.rect.y = start[1]
+    
+    def update(self):
+        # if collision with player
+        if self.rect.colliderect(sprite.rect):
+            print("collision")
+            sprite.rect.x = 30
+            sprite.rect.y = 530
+        self.rect.x += self.velocity
+        if self.rect.x > screen_width:
+            self.rect.x = 0
+        if self.rect.x < 0:
+            self.rect.x = screen_width
+    
+
+enemy_coord = [(6, 404), (567, 275)]
+
+enemi_group = pygame.sprite.Group()
+for coord in enemy_coord:
+    enemi = Enemi("assets/enemi.png", (screen_width // 2, screen_height // 2), coord, 5)
+    enemi_group.add(enemi)
+
+
+
+
 # Boucle principale
 running = True
 while running:
@@ -114,11 +147,14 @@ while running:
     
     # Dessiner tous les sprites (joueur)
     sprites_group.draw(screen)
+    sprites_group.update()
+    enemi_group.draw(screen)
+    enemi_group.update()
 
     # Dessiner le point d'arrivée (invisible pour le joueur)
     pygame.draw.rect(screen, WIN_COLOR, end_rect)  # Cela sert à la détection de collision seulement
 
-    #print(sprite.rect.x, "  |  ", sprite.rect.y)
+    print(sprite.rect.x, "  |  ", sprite.rect.y)
     
     # Mettre à jour l'affichage
     pygame.display.flip()
