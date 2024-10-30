@@ -153,11 +153,8 @@ while running:
 
     # Dessiner le point d'arrivée (invisible pour le joueur)
     pygame.draw.rect(screen, WIN_COLOR, end_rect)  # Cela sert à la détection de collision seulement
-
-    print(sprite.rect.x, "  |  ", sprite.rect.y)
-    
     # Mettre à jour l'affichage
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(100)
 
 pygame.quit()
