@@ -1,4 +1,3 @@
-import sys
 import time
 import pygame
 
@@ -127,7 +126,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-            sys.exit()
+             
 
     # Gestion du mouvement du joueur
     keys = pygame.key.get_pressed()
